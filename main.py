@@ -182,8 +182,36 @@ if __name__ == '__main__':
                     filename = 'number/{}.jpg'.format(i)
                     save = whiteboxes[i][t:t + q, r:r + c]
                     # ret, thresh = cv2.threshold(save, 127, 255, 0)
+                    #######################################
+                    #
+                    #extract bounding on the number
+                    #
+                    # img = cv2.imread(save)
+                    #### (img, 140, 255, 0)   between 140 ,150,127
+                    ret, thresh = cv2.threshold(save, 141, 255, 0)
 
-                    cv2.imwrite(filename, save)
+                    gray = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
+
+                    # (2) threshold-inv and morph-open
+                    th, threshed = cv2.threshold(gray, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
+                    morphed = cv2.morphologyEx(threshed, cv2.MORPH_OPEN, np.ones((2, 2)))
+                    # (3) find and filter contours, then draw on src
+                    cnts = cv2.findContours(morphed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+                    x = y = w = h = 0
+                    nh, nw = save.shape[:2]
+                    # crop12=np.array()
+                    for cnt in cnts:
+                        x, y, w, h = bbox = cv2.boundingRect(cnt)
+                        if h < 0.5 * nh or (x == 0 and y == 0):
+                            continue
+                        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 1, cv2.LINE_AA)
+                        crop12 = threshed[y:y + h, x:x + w]
+                        cv2.imwrite(filename, crop12)
+                    #
+                    # extract bounding on the number
+                    #
+                    ###################################
+
                     cell.append(1)
 
                 else:
@@ -193,30 +221,7 @@ if __name__ == '__main__':
             print(cell)
 
             ######################## display
-            # imgDetectedDigits = displayNumbers(imagewrapcolor, cell, color=(0, 0, 255))
 
-            """this code to save all picture 81 in folder number """
-            # for i in range(len(boxes)):
-            #     # cv2.imshow(" boxes[0] ", boxes[4])
-            #     filename = 'number/{}.jpg'.format(i)
-            #     y = 10
-            #     x = 10
-            #     h = 35
-            #     w = 35
-            #     crop = boxes[i][y:y + h, x:x + w]
-            #
-            #     # Saving the image
-            #     cv2.imwrite(filename, crop)
-
-
-
-
-            # من أجل عرض جميع ال مربعات
-            # for i in range(81):
-            #     plt.subplot(9,9,i+1),plt.imshow(boxes[i])
-            #     plt.xticks([]), plt.yticks([])
-            # # print(i)
-            # plt.show()
 
         ######################################################
         ## exit run
