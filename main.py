@@ -99,7 +99,7 @@ if __name__ == '__main__':
             #
             #
             ################################
-            ### remove all line
+            # ### remove all line
             image = imagewrapcolor1
             # image = cv2.imread('1.png')
             result = image.copy()
@@ -153,7 +153,7 @@ if __name__ == '__main__':
             w = 25
             # boxes[9] = boxes[9][y:y + h, x:x + w]
             # n_black_pix = np.sum(boxes[9] == 0)
-         
+
             # print('Number of black pixels:', n_black_pix)
             # n_white_pix = np.sum(boxes[9] == 255)
             # # print(boxes[1].shape)
@@ -161,8 +161,8 @@ if __name__ == '__main__':
             # """for identify blank cell """
             t = 5
             r = 5
-            q = 35
-            c = 35
+            q = 40
+            c = 40
 
             save = boxes[4][t:t + q, r:r + c]
             zs = cv2.Canny(save, 30, 200) #Perform Edge detection
@@ -181,8 +181,9 @@ if __name__ == '__main__':
                 if n_white_pix > 90 :
                     filename = 'number/{}.jpg'.format(i)
                     save = whiteboxes[i][t:t + q, r:r + c]
-                    ret, thresh = cv2.threshold(save, 127, 255, 0)
-                    cv2.imwrite(filename, whiteboxes[i])
+                    # ret, thresh = cv2.threshold(save, 127, 255, 0)
+
+                    cv2.imwrite(filename, save)
                     cell.append(1)
 
                 else:
