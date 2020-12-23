@@ -153,7 +153,7 @@ if __name__ == '__main__':
             w = 25
             # boxes[9] = boxes[9][y:y + h, x:x + w]
             # n_black_pix = np.sum(boxes[9] == 0)
-            # print(n_black_pix)
+         
             # print('Number of black pixels:', n_black_pix)
             # n_white_pix = np.sum(boxes[9] == 255)
             # # print(boxes[1].shape)
@@ -164,12 +164,9 @@ if __name__ == '__main__':
             q = 35
             c = 35
 
-
-
             save = boxes[4][t:t + q, r:r + c]
             zs = cv2.Canny(save, 30, 200) #Perform Edge detection
             cv2.imshow(" boxes[0] ", zs)
-
 
             cell=[]
             cell1 =[]
@@ -194,7 +191,7 @@ if __name__ == '__main__':
             # print(np.array(cell1).reshape(9,9))
             print(cell)
 
-            ######################## display 
+            ######################## display
             # imgDetectedDigits = displayNumbers(imagewrapcolor, cell, color=(0, 0, 255))
 
             """this code to save all picture 81 in folder number """
