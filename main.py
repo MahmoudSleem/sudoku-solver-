@@ -31,7 +31,7 @@ def displayNumbers(img,numbers,color = (0,255,0)):
     for x in range (0,9):
         for y in range (0,9):
             if numbers[(y*9)+x] != 0 :
-                 cv2.putText(img, str(numbers[(y*9)+x]),
+                 cv2.putText(img, '1',
                                (x*secW+int(secW/2)-10, int((y+0.8)*secH)), cv2.FONT_HERSHEY_COMPLEX_SMALL,
                             2, color, 2, cv2.LINE_AA)
     return img
@@ -104,6 +104,7 @@ if __name__ == '__main__':
             # image = cv2.imread('1.png')
             result = image.copy()
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
             thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
             # Remove horizontal lines
@@ -188,38 +189,39 @@ if __name__ == '__main__':
                     #
                     # img = cv2.imread(save)
                     #### (img, 140, 255, 0)   between 140 ,150,127
-                    ret, thresh = cv2.threshold(save, 141, 255, 0)
-
-                    gray = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
-
-                    # (2) threshold-inv and morph-open
-                    th, threshed = cv2.threshold(gray, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
-                    morphed = cv2.morphologyEx(threshed, cv2.MORPH_OPEN, np.ones((2, 2)))
-                    # (3) find and filter contours, then draw on src
-                    cnts = cv2.findContours(morphed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-                    x = y = w = h = 0
-                    nh, nw = save.shape[:2]
-                    # crop12=np.array()
-                    for cnt in cnts:
-                        x, y, w, h = bbox = cv2.boundingRect(cnt)
-                        if h < 0.5 * nh or (x == 0 and y == 0):
-                            continue
-                        # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 1, cv2.LINE_AA)
-                        crop12 = threshed[y:y + h, x:x + w]
-                        cv2.imwrite(filename, crop12)
+                    # ret, thresh = cv2.threshold(save, 141, 255, 0)
                     #
+                    # gray = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
+                    #
+                    # # (2) threshold-inv and morph-open
+                    # th, threshed = cv2.threshold(gray, 100, 255, cv2.THRESH_OTSU | cv2.THRESH_BINARY_INV)
+                    # morphed = cv2.morphologyEx(threshed, cv2.MORPH_OPEN, np.ones((2, 2)))
+                    # # (3) find and filter contours, then draw on src
+                    # cnts = cv2.findContours(morphed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+                    # x = y = w = h = 0
+                    # nh, nw = save.shape[:2]
+                    # # crop12=np.array()
+                    # for cnt in cnts:
+                    #     x, y, w, h = cv2.boundingRect(cnt)
+                    #     if h < 0.5 * nh or (x == 0 and y == 0):
+                    #         continue
+                    #     # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 1, cv2.LINE_AA)
+                    #     crop12 = threshed[y:y + h, x:x + w]
+                    cv2.imwrite(filename, save)
+
                     # extract bounding on the number
                     #
                     ###################################
 
                     cell.append(1)
-
                 else:
                     cell.append(0)
-            cell = np.array(cell).reshape(9,9)
-            # print(np.array(cell1).reshape(9,9))
-            print(cell)
+            # cell = np.array(cell).reshape(9,9)
 
+
+            imge3 = displayNumbers(imagewrapcolor1, cell, color=(0, 255, 0))
+            cv2.imshow("imge3", imge3)
+            # print(np.array(cell1).reshape(9,9))
             ######################## display
 
 
